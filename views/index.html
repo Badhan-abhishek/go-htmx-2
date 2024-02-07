@@ -1,0 +1,102 @@
+{{ template "partials/baseHead" .Title }}
+
+<main id="main">
+    <header class="p-4 shadow-md border-b bg-gray-500">
+        <h1 class="text-3xl text-white">{{ .Title }}</h1>
+    </header>
+    <section class="container mx-auto py-6 max-w-lg">
+        {{ template "message" . }}
+        {{ template "errors" .}}
+        <div class="">
+            <a class="underline text-blue-600" href="/projects">Go to Projects</a>
+            <form hx-post="/add-task" hx-target="#message" hx-swap="outerHTML" class="flex flex-col gap-4">
+                <label for="project" class="flex flex-col">
+                    Project
+                    <select class="border border-black rounded-md p-2" id="project" name="project">
+                        {{ range .Projects }}
+                        <option value="{{ .Slug }}">{{ .Name }}</option>
+                        {{ end }}
+                    </select>
+                </label>
+                <div class="grid grid-cols-2 gap-4">
+                    <label class="flex flex-col">
+                        Start Time
+                        <input class="border border-black p-1 rounded-md" type="time" name="startTime" />
+                    </label>
+                    <label class="flex flex-col">
+                        End Time
+                        <input class="border border-black p-1 rounded-md" type="time" name="endTime" />
+                    </label>
+                </div>
+                <label class="flex flex-col">
+                    Task Title
+                    <input class="p-2 border rounded-md border-black" type="text" name="title" />
+                </label>
+                <label class="flex flex-col">
+                    Task Detail
+                    <textarea rows="6" id="taskDetail" name="taskDetails"
+                        class="w-full border border-black rounded-md p-2 my-2"
+                        placeholder="Enter task details"></textarea>
+                </label>
+                <div class="flex justify-end">
+                    <button class="border py-2 px-4 bg-green-400 text-black rounded-md">Add Task</button>
+                </div>
+            </form>
+        </div>
+    </section>
+    <section class="container mx-auto">
+        <div class="relative overflow-x-auto">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        {{ range .Tasks.Headers }}
+                        <th scope="col" class="px-6 py-3">
+                            <span class="text-start w-full block">
+                                {{ .Name }}
+                            </span>
+                        </th>
+                        {{ end }}
+                    </tr>
+                </thead>
+                <tbody>
+                    {{range .Tasks.Data}}
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <td class="px-6 py-4">
+                            {{ .Title }}
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="whitespace-pre-wrap">{{ .Content }}</span>
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ .StartTime }}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ .EndTime }}
+                        </td>
+                    </tr>
+                    {{ end }}
+                </tbody>
+            </table>
+    </section>
+</main>
+
+<div id="errors" hx-swap-oob="true"></div>
+
+{{ block "message" .Message }}
+<div id="message">
+    {{ if (.Message)}}
+    <p class="p-2 border border-red bg-blue-300 text-black">{{.Message}}</p>
+    <button hx-indicator="#clearMessage" hx-swap="outerHTML swap:500ms" hx-target="#main" type="button" hx-get="/">Clear
+        message</button>
+    <p id="clearMessage" class="htmx-indicator">Loading...</p>
+    {{end}}
+</div>
+{{end}}
+
+{{ block "errors" .Error }}
+<div id="errors">
+    {{ if (.Error)}}
+    <p class="p-2 bg-red-300 text-black border border-red">{{.Error}}</p>
+    {{ end }}
+</div>
+{{ end }}

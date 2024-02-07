@@ -1,0 +1,67 @@
+{{ template "partials/baseHead" .Title }}
+
+<main id="main" class="container mx-auto max-w-lg">
+    <a href="/">Back</a>
+    {{ template "message" . }}
+    {{ template "errors" .}}
+    <div>
+        <form class="flex gap-3 items-end" hx-post="/add-project" hx-swap="outerHTML" hx-target="#message">
+            <label class="flex flex-col">
+                Project Title
+                <input class="p-1 border" type="text" name="name" />
+            </label>
+            <button class="border py-1 px-4 bg-blue-700 text-white rounded-md">
+                Save
+            </button>
+        </form>
+    </div>
+    <table class="table-auto">
+        <thead>
+            <tr>
+                {{ range .Table.Headers }}
+                <th>
+                    {{ .Name }}
+                </th>
+                {{ end }}
+            </tr>
+        </thead>
+        <tbody>
+            {{range .Table.Data}}
+            <tr>
+                <td>
+                    {{ .Name }}
+                </td>
+                <td>
+                    {{ .Sequence }}
+                </td>
+                <td>
+                    {{ .Slug }}
+                </td>
+                <td>
+                    {{ .CreatedAt }}
+                </td>
+            </tr>
+            {{ end }}
+        </tbody>
+    </table>
+</main>
+
+{{ block "message" .Message }}
+<div id="message">
+    {{ if (.Message)}}
+    <p class="p-2 border border-red bg-blue-300 text-black">{{.Message}}</p>
+    <button hx-indicator="#clearMessage" hx-swap="outerHTML swap:500ms" hx-target="#main" type="button"
+        hx-get="/projects">Clear
+        message</button>
+    <p id="clearMessage" class="htmx-indicator">Loading...</p>
+    {{end}}
+</div>
+{{end}}
+
+{{ block "errors" .Error }}
+<div id="errors">
+    {{ if (.Error)}}
+    <p class="p-2 bg-red-300 text-black border border-red">{{.Error}}</p>
+    {{ end }}
+</div>
+{{ end }}
