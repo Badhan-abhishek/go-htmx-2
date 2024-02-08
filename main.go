@@ -5,14 +5,14 @@ import (
 	"tasks/cmd/models"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/template/html/v2"
+	"github.com/gofiber/template/django/v2"
 )
 
 func main() {
 
 	models.ConnectDb()
 
-	engine := html.New("./views", ".html")
+	engine := django.New("./views", ".html")
 
 	engine.Reload(true)
 

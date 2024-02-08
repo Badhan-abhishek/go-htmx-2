@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ Title }}</title>
+    <link rel="stylesheet" href="/assets/css/tailwind.css" />
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <style>
+      dialog::backdrop {
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+    </style>
+  </head>
+
+  <body>
+    <section class="h-screen flex w-screen">
+      <section class="max-w-64 p-4 bg-gray-800 text-white">
+        <ul>
+          <li>
+            <a href="/">Tasks</a>
+          </li>
+          <li>
+            <a href="/projects">Manage Projects</a>
+          </li>
+        </ul>
+      </section>
+      <main id="main" class="overflow-y-auto w-full flex-1">
+        <header class="p-4 shadow-md border-b bg-gray-500">
+          <h1 class="text-3xl text-white">{{ Title }}</h1>
+        </header>
+        <section class="container mx-auto">
+          {% block content %}{% endblock %}
+        </section>
+      </main>
+    </section>
+  </body>
+</html>

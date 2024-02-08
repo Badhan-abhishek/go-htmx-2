@@ -9,12 +9,15 @@ require (
 	gorm.io/gorm v1.25.7
 )
 
+require github.com/flosch/pongo2/v4 v4.0.2 // indirect
+
 require (
 	github.com/alecthomas/kong v0.7.1 // indirect
 	github.com/andybalholm/brotli v1.0.5 // indirect
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
 	github.com/gofiber/fiber/v2 v2.52.0 // indirect
 	github.com/gofiber/template v1.8.2 // indirect
+	github.com/gofiber/template/django/v2 v2.0.0
 	github.com/gofiber/template/html/v2 v2.1.0 // indirect
 	github.com/gofiber/utils v1.1.0 // indirect
 	github.com/golang-sql/civil v0.0.0-20220223132316-b832511892a9 // indirect

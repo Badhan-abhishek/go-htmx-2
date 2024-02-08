@@ -62,8 +62,8 @@ func GetProjects() *Table {
 func Projects(c *fiber.Ctx) error {
 	table := GetProjects()
 	return c.Render("projects", fiber.Map{
-		"Title": "Projects",
-		"Table": table,
+		"Title":    "Projects",
+		"Projects": table,
 	})
 }
 
