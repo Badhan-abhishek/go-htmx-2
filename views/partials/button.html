@@ -1,0 +1,9 @@
+{{ define "partials/button" }}
+    {{ $id := index . 0 }}
+    {{ $text := index . 1 }}
+    {{ $class := index . 2 }}
+    {{ $type := index . 3 }}
+<button id="{{ $id }}" type="{{ $type }}" class="{{ $class }}">
+    {{ $text }}
+</button>
+{{end}}

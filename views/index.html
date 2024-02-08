@@ -1,5 +1,9 @@
 {{ template "partials/baseHead" .Title }}
-
+<style>
+    dialog::backdrop {
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+</style>
 <main id="main">
     <header class="p-4 shadow-md border-b bg-gray-500">
         <h1 class="text-3xl text-white">{{ .Title }}</h1>
@@ -9,39 +13,47 @@
         {{ template "errors" .}}
         <div class="">
             <a class="underline text-blue-600" href="/projects">Go to Projects</a>
-            <form hx-post="/add-task" hx-target="#message" hx-swap="outerHTML" class="flex flex-col gap-4">
-                <label for="project" class="flex flex-col">
-                    Project
-                    <select class="border border-black rounded-md p-2" id="project" name="project">
-                        {{ range .Projects }}
-                        <option value="{{ .Slug }}">{{ .Name }}</option>
-                        {{ end }}
-                    </select>
-                </label>
-                <div class="grid grid-cols-2 gap-4">
+            <button id="addNewTask" type="button" class="btn-primary">
+                Add New Task
+            </button>
+            <dialog
+            style="::backdrop { background-color: rgba(0, 0, 0, 0.5); }"
+            class="z-50 p-4 rounded-md border shadow-lg backdrop:bg-gray-300 backdrop:bg-opacity-40">
+                <form hx-post="/add-task" hx-target="#message" hx-swap="outerHTML" class="flex flex-col gap-4 w-[400px]">
+                    <label for="project" class="flex flex-col">
+                        Project
+                        <select class="border border-black rounded-md p-2" id="project" name="project">
+                            {{ range .Projects }}
+                            <option value="{{ .Slug }}">{{ .Name }}</option>
+                            {{ end }}
+                        </select>
+                    </label>
+                    <div class="grid grid-cols-2 gap-4">
+                        <label class="flex flex-col">
+                            Start Time
+                            <input class="border border-black p-1 rounded-md" type="time" name="startTime" />
+                        </label>
+                        <label class="flex flex-col">
+                            End Time
+                            <input class="border border-black p-1 rounded-md" type="time" name="endTime" />
+                        </label>
+                    </div>
                     <label class="flex flex-col">
-                        Start Time
-                        <input class="border border-black p-1 rounded-md" type="time" name="startTime" />
+                        Task Title
+                        <input class="p-2 border rounded-md border-black" type="text" name="title" />
                     </label>
                     <label class="flex flex-col">
-                        End Time
-                        <input class="border border-black p-1 rounded-md" type="time" name="endTime" />
+                        Task Detail
+                        <textarea rows="6" id="taskDetail" name="taskDetails"
+                            class="w-full border border-black rounded-md p-2 my-2"
+                            placeholder="Enter task details"></textarea>
                     </label>
-                </div>
-                <label class="flex flex-col">
-                    Task Title
-                    <input class="p-2 border rounded-md border-black" type="text" name="title" />
-                </label>
-                <label class="flex flex-col">
-                    Task Detail
-                    <textarea rows="6" id="taskDetail" name="taskDetails"
-                        class="w-full border border-black rounded-md p-2 my-2"
-                        placeholder="Enter task details"></textarea>
-                </label>
-                <div class="flex justify-end">
-                    <button class="border py-2 px-4 bg-green-400 text-black rounded-md">Add Task</button>
-                </div>
-            </form>
+                    <div class="flex justify-end gap-2">
+                        <button id="close" class="border py-2 px-4 border-red-400 text-black rounded-md" type="button" autofocus>Cancel</button>
+                        <button id="addTask" class="border py-2 px-4 bg-green-400 text-black rounded-md">Add Task</button>
+                    </div>
+                </form>
+            </dialog>
         </div>
     </section>
     <section class="container mx-auto">
@@ -81,6 +93,24 @@
 </main>
 
 <div id="errors" hx-swap-oob="true"></div>
+
+<script>
+    const dialog = document.querySelector('dialog');
+    const closeButton = document.querySelector('button#close');
+    const addTaskButton = document.querySelector('button#addTask');
+    dialog.addEventListener('close', function () {
+        document.querySelector('form').reset();
+    });
+    closeButton.addEventListener('click', function () {
+        dialog.close();
+    });
+    addTaskButton.addEventListener('click', function () {
+        dialog.close();
+    });
+    document.getElementById("addNewTask").addEventListener('click', function() {
+        dialog.showModal();
+    })
+</script>
 
 {{ block "message" .Message }}
 <div id="message">
