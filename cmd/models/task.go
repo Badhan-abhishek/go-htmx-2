@@ -7,5 +7,5 @@ type Task struct {
 	StartTime *string `json:"startTime"`
 	EndTime   *string `json:"endTime"`
 	ProjectID uint    `json:"-"`
-	Project   Project `json:"projec"`
+	Project   Project `json:"project"`
 }

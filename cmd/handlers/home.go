@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 	"tasks/cmd/models"
 
@@ -19,11 +18,10 @@ type TaskTable struct {
 
 func Home(c *fiber.Ctx) error {
 	var tasks []models.Task
-	result := models.Db.Preload("project").Find(&tasks)
+	result := models.Db.Preload("Project").Find(&tasks)
 	if result.Error != nil {
 		// Do nothing
 	}
-	fmt.Printf("tasks: %v\n", tasks)
 	header := []TaskTableHeaders{
 		{
 			Name: "Title",
@@ -36,6 +34,9 @@ func Home(c *fiber.Ctx) error {
 		},
 		{
 			Name: "End Time",
+		},
+		{
+			Name: "Project",
 		},
 	}
 	table := GetProjects()
@@ -65,9 +66,18 @@ func AddTask(c *fiber.Ctx) error {
 		})
 	}
 
+	var project models.Project
+	result := models.Db.Where("slug = ?", t.Project).First(&project)
+	if result.Error != nil {
+		return c.Status(http.StatusBadRequest).Render("errors", fiber.Map{
+			"Error": result.Error.Error(),
+		})
+	}
+
 	task := models.Task{
-		Title:   t.Title,
-		Content: t.TaskDetails,
+		Title:     t.Title,
+		Content:   t.TaskDetails,
+		ProjectID: project.ID,
 	}
 	if t.StartTime != nil {
 		task.StartTime = t.StartTime
@@ -77,7 +87,7 @@ func AddTask(c *fiber.Ctx) error {
 		task.EndTime = t.EndTime
 	}
 
-	result := models.Db.Save(&task)
+	result = models.Db.Save(&task)
 	if result.Error != nil {
 		return c.Status(http.StatusBadRequest).Render("errors", fiber.Map{
 			"Error": result.Error.Error(),

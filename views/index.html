@@ -1,14 +1,15 @@
-{{ template "partials/baseHead" .Title }}
+{{ template "partials/baseHead" . }}
 <style>
     dialog::backdrop {
         background-color: rgba(0, 0, 0, 0.5);
     }
 </style>
-<main id="main">
+
+<main style="flex: 1" id="main overflow-y-auto w-full flex-1">
     <header class="p-4 shadow-md border-b bg-gray-500">
         <h1 class="text-3xl text-white">{{ .Title }}</h1>
     </header>
-    <section class="container mx-auto py-6 max-w-lg">
+    <section class="container mx-auto py-6">
         {{ template "message" . }}
         {{ template "errors" .}}
         <div class="">
@@ -16,10 +17,10 @@
             <button id="addNewTask" type="button" class="btn-primary">
                 Add New Task
             </button>
-            <dialog
-            style="::backdrop { background-color: rgba(0, 0, 0, 0.5); }"
-            class="z-50 p-4 rounded-md border shadow-lg backdrop:bg-gray-300 backdrop:bg-opacity-40">
-                <form hx-post="/add-task" hx-target="#message" hx-swap="outerHTML" class="flex flex-col gap-4 w-[400px]">
+            <dialog style="::backdrop { background-color: rgba(0, 0, 0, 0.5); }"
+                class="z-50 p-4 rounded-md border shadow-lg backdrop:bg-gray-300 backdrop:bg-opacity-40">
+                <form hx-post="/add-task" hx-target="#message" hx-swap="outerHTML"
+                    class="flex flex-col gap-4 w-[400px]">
                     <label for="project" class="flex flex-col">
                         Project
                         <select class="border border-black rounded-md p-2" id="project" name="project">
@@ -49,8 +50,10 @@
                             placeholder="Enter task details"></textarea>
                     </label>
                     <div class="flex justify-end gap-2">
-                        <button id="close" class="border py-2 px-4 border-red-400 text-black rounded-md" type="button" autofocus>Cancel</button>
-                        <button id="addTask" class="border py-2 px-4 bg-green-400 text-black rounded-md">Add Task</button>
+                        <button id="close" class="border py-2 px-4 border-red-400 text-black rounded-md" type="button"
+                            autofocus>Cancel</button>
+                        <button id="addTask" class="border py-2 px-4 bg-green-400 text-black rounded-md">Add
+                            Task</button>
                     </div>
                 </form>
             </dialog>
@@ -85,6 +88,9 @@
                         <td class="px-6 py-4">
                             {{ .EndTime }}
                         </td>
+                        <td class="px-6 py-4">
+                            {{ .Project.Name }}
+                        </td>
                     </tr>
                     {{ end }}
                 </tbody>
@@ -105,9 +111,9 @@
         dialog.close();
     });
     addTaskButton.addEventListener('click', function () {
-        dialog.close();
+        document.querySelector('form').reset();
     });
-    document.getElementById("addNewTask").addEventListener('click', function() {
+    document.getElementById("addNewTask").addEventListener('click', function () {
         dialog.showModal();
     })
 </script>
