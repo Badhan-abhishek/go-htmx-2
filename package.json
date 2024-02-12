@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tailwindcss build -o public/css/*.css",
-    "watch": "tailwindcss build -o public/css/*.css --watch"
+    "build": "tailwindcss build -i public/css/tailwind.css -o public/css/build/tailwind.css",
+    "watch": "tailwindcss build -i public/css/tailwind.css -o public/css/build/tailwind.css --watch"
   },
   "keywords": [],
   "author": "",

@@ -1,31 +1,34 @@
-{% extends "./layouts/index.html" %} {% block content %}
-<section>
-  <button id="addNewProject" type="button" class="btn-primary">
-    Add New Task
+{% extends "./layouts/base.html" %} {% block content %}
+<section class="flex flex-col gap-3 py-3">
+  <button
+    id="addNewProject"
+    type="button"
+    class="bg-blue-700 self-end rounded-md border-2 border-transparent focus:border-blue-400 text-white px-4 py-2"
+  >
+    Add New Project
   </button>
+  <div id="message">
+    {% if Message %}
+    <p class="p-2 border border-red bg-blue-300 text-black">{{Message}}</p>
+    <button
+      hx-indicator="#clearMessage"
+      hx-swap="outerHTML swap:500ms"
+      hx-target="#main"
+      type="button"
+      hx-get="/"
+    >
+      Clear message
+    </button>
+    <p id="clearMessage" class="htmx-indicator">Loading...</p>
+    {% endif %}
+  </div>
+  <div id="errors">
+    {% if Error %}
+    <p class="p-2 bg-red-300 text-black border border-red">{{Error}}</p>
+    {% endif %}
+  </div>
   <dialog id="projectDialog" class="z-50 p-4 rounded-md border shadow-lg">
-    <div id="message">
-      {% if Message %}
-      <p class="p-2 border border-red bg-blue-300 text-black">{{Message}}</p>
-      <button
-        hx-indicator="#clearMessage"
-        hx-swap="outerHTML swap:500ms"
-        hx-target="#main"
-        type="button"
-        hx-get="/"
-      >
-        Clear message
-      </button>
-      <p id="clearMessage" class="htmx-indicator">Loading...</p>
-      {% endif %}
-    </div>
-    <div id="errors">
-      {% if Error %}
-      <p class="p-2 bg-red-300 text-black border border-red">{{Error}}</p>
-      {% endif %}
-    </div>
     <form
-      class="flex gap-3 items-end"
       hx-post="/add-project"
       hx-swap="outerHTML"
       hx-target="#message"

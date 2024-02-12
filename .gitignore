@@ -26,3 +26,5 @@ node_modules
 tmp
 package-lock.json
 yarn.lock
+
+public/css/build
